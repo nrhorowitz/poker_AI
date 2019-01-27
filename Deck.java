@@ -5,19 +5,26 @@ import java.util.Stack;
 import java.util.Iterator;
 
 public class Deck {
-  private ArrayList<Pair<String, ArrayList<Card>>> board;
+  private ArrayList<String> board;
   private ArrayList<Card> opponentHand;
   private ArrayList<Card> playerHand;
   private ArrayList<Card> boardHand;
   private ArrayList<Card> stackDeck;
 
+  private Map<String, ArrayList<Card>> deckLookup;
+
   public Deck() {
-    board = new ArrayList<Pair<String, ArrayList<Card>>>();
+    board = new ArrayList<String>();
+    deckLookup = new HashMap<String, ArrayList<Card>>();
     resetBoard();
-    board.add(new Pair("Opponent Hand", opponentHand));
-    board.add(new Pair("Player Hand", playerHand));
-    board.add(new Pair("Board", boardHand));
-    board.add(new Pair("Deck", stackDeck));
+    board.add("Opponent");
+    board.add("Player");
+    board.add("Board");
+    board.add("Deck");
+    deckLookup.put("Opponent", opponentHand);
+    deckLookup.put("Player", playerHand);
+    deckLookup.put("Board", boardHand);
+    deckLookup.put("Deck", stackDeck);
   }
 
   public void resetBoard() {
@@ -52,13 +59,24 @@ public class Deck {
   }
 
   public void showBoard() {
-    for(Pair<String, ArrayList<Card>> p: board) {
-      System.out.println("---" + p.getKey() + "----");
-      for(Card c: p.getValue()) {
+    for(String s: board) {
+      System.out.println("---" + s + "----");
+      for(Card c: deckLookup.get(s)) {
         System.out.println(c.toString());
       }
     }
   }
+
+  public void dealCard(String destination, String cardName) {
+    String[] cardValues = cardName.split(" of ");
+    for(int i = 0; i < stackDeck.size(); i++) {
+      if((stackDeck.get(i).getValue().equals(cardValues[0])) && (stackDeck.get(i).getSuit().equals(cardValues[1]))) {
+        deckLookup.get(destination).add(stackDeck.remove(i));
+        return;
+      }
+    }
+  }
+
 
 
 }
