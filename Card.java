@@ -19,4 +19,14 @@ public class Card {
     return value + " of " + suit;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    Card c = (Card)o;
+    if((c.getValue().equals(value)) && (c.getSuit().equals(suit))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
